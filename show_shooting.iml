@@ -50,6 +50,7 @@
     <orderEntry type="library" name="Spring MVC-5.2.3.RELEASE" level="project" />
     <orderEntry type="library" name="Spring Data JPA-2.2.4.RELEASE" level="project" />
     <orderEntry type="library" name="Hibernate 5.4.11-5.4.11" level="project" />
+    <orderEntry type="library" name="jquery.dataTables" level="application" />
     <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.18.22" level="project" />
     <orderEntry type="library" name="Maven: com.github.javaparser:javaparser-core:3.2.11" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-web:2.5.5" level="project" />
@@ -171,7 +172,5 @@
     <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.11" level="project" />
     <orderEntry type="library" name="Maven: org.webjars:jquery:2.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.webjars.npm:popper.js:1.13.0" level="project" />
-    <orderEntry type="library" name="Maven: org.webjars:font-awesome:5.0.2" level="project" />
-    <orderEntry type="library" name="jquery.dataTables" level="application" />
   </component>
 </module>
