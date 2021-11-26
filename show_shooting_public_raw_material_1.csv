@@ -1,9 +1,0 @@
-Raw_ID,Name,Duration,Status,Scenario_ID,Task_ID
-4,Underground,46,Improvement required,1,4
-8,Restaurant,0,Not started,3,1
-5,Studio,67,During,3,4
-1,Street,52,Improvement required,2,2
-6,Diner,18,Improvement required,2,2
-3,Laboratory,68,During,3,1
-7,Headquarters,36,Improvement required,2,3
-2,Airplane,88,Filmed,3,3
