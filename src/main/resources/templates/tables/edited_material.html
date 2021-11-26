@@ -23,7 +23,7 @@
                     <th>Длительность</th>
                     <th>Статус</th>
                     <th>ID сырого материала</th>
-                    <th sec:authorize="hasAuthority('ADMIN')">Действия</th>
+                    <th class="action">Действия</th>
                 </tr>
                 </thead>
                 <tfoot>
@@ -33,7 +33,7 @@
                     <th>Длительность</th>
                     <th>Статус</th>
                     <th>ID сырого материала</th>
-                    <th sec:authorize="hasAuthority('ADMIN')">Действия</th>
+                    <th class="action">Действия</th>
                 </tr>
                 </tfoot>
             </table>
@@ -187,6 +187,8 @@
                             '</div>';
                     }
                 }]
+        } else {
+            $('.action').remove();
         }
 
         datatable = $('#table').DataTable({

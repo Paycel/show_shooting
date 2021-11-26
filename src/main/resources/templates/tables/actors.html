@@ -27,7 +27,7 @@
                     <th>ID сценария</th>
                     <th>Отказ от съемок</th>
                     <th>Отказ от сценария</th>
-                    <th sec:authorize="hasAuthority('ADMIN')">Действия</th>
+                    <th class="action">Действия</th>
                 </tr>
                 </thead>
                 <tfoot>
@@ -40,7 +40,7 @@
                     <th>ID сценария</th>
                     <th>Отказ от съемок</th>
                     <th>Отказ от сценария</th>
-                    <th sec:authorize="hasAuthority('ADMIN')">Действия</th>
+                    <th class="action">Действия</th>
                 </tr>
                 </tfoot>
             </table>
@@ -225,6 +225,8 @@
                             '</div>';
                     }
                 }];
+        } else {
+            $('.action').remove();
         }
 
         datatable = $('#table').DataTable({

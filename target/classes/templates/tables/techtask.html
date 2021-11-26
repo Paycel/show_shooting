@@ -20,14 +20,14 @@
                 <tr>
                     <th>ID</th>
                     <th>Ссылка</th>
-                    <th sec:authorize="hasAuthority('ADMIN')">Действия</th>
+                    <th class="action">Действия</th>
                 </tr>
                 </thead>
                 <tfoot>
                 <tr>
                     <th>ID</th>
                     <th>Ссылка</th>
-                    <th sec:authorize="hasAuthority('ADMIN')">Действия</th>
+                    <th class="action">Действия</th>
                 </tr>
                 </tfoot>
             </table>
@@ -149,6 +149,8 @@
                             '</div>';
                     }
                 }]
+        } else {
+            $('.action').remove();
         }
 
         datatable = $('#table').DataTable({

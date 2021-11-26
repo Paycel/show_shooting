@@ -24,7 +24,7 @@
                     <th>Статус</th>
                     <th>ID сценария</th>
                     <th>ID тех. задания</th>
-                    <th sec:authorize="hasAuthority('ADMIN')">Действия</th>
+                    <th class="action">Действия</th>
                 </tr>
                 </thead>
                 <tfoot>
@@ -35,7 +35,7 @@
                     <th>Статус</th>
                     <th>ID сценария</th>
                     <th>ID тех. задания</th>
-                    <th sec:authorize="hasAuthority('ADMIN')">Действия</th>
+                    <th class="action">Действия</th>
                 </tr>
                 </tfoot>
             </table>
@@ -200,6 +200,8 @@
                             '</div>';
                     }
                 }]
+        } else {
+            $('.action').remove();
         }
 
         datatable = $('#table').DataTable({
