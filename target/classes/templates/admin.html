@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <div th:replace="fragments/header :: header-css"/>
+  <title>Администрация</title>
+</head>
+<body>
+
+<div th:replace="fragments/header :: header"/>
+<div class="container">
+
+  <div class="starter-template">
+    <h1>Страница админа</h1>
+    <h1 th:inline="text">Приветствуем, [[${#httpServletRequest.remoteUser}]]!</h1>
+    <div class="m-3">
+      <form method="GET" action="/profile">
+        <button type="submit" class="btn btn-info">Назад</button>
+      </form>
+    </div>
+  </div>
+
+</div>
+
+<div th:replace="fragments/footer :: footer"/>
+
+</body>
+</html>

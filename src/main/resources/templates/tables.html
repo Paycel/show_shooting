@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Таблицы базы данных</title>
+    <div th:replace="fragments/header :: header-css"/>
+</head>
+<body>
+
+<div th:replace="fragments/header :: header"/>
+
+<div class="container">
+
+    <div class="list-group">
+        <a href="/profile/database/actors" class="list-group-item list-group-item-action">Актеры шоу</a>
+        <a href="/profile/database/raw_material" class="list-group-item list-group-item-action">Сырой (отснятый) материал</a>
+        <a href="/profile/database/edited_material" class="list-group-item list-group-item-action">Смонтированный материал</a>
+        <a href="/profile/database/scenario" class="list-group-item list-group-item-action">Сценарии</a>
+        <a href="/profile/database/techtask" class="list-group-item list-group-item-action">Технические задания</a>
+    </div>
+
+</div>
+
+<div th:replace="fragments/footer :: footer"/>
+
+</body>
+</html>

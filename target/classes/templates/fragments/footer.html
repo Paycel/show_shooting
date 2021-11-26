@@ -1,0 +1,26 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+<head>
+</head>
+<body>
+<div th:fragment="footer" class="mt-5">
+    <div class="container">
+        <footer>
+            © 2021 Show Shooting INC
+            <span sec:authorize="isAuthenticated()">| Текущий пользователь: <span sec:authentication="name"></span> |
+                Ваши роли: <span sec:authentication="principal.authorities"></span> |
+                <a th:href="@{/logout}">Выход</a>
+            </span>
+            <span sec:authorize="!isAuthenticated()">
+                <a th:href="@{/registration}">Регистрация</a>
+            </span>
+        </footer>
+    </div>
+    <script th:src="@{/webjars/popper.js/1.13.0/dist/umd/popper.min.js}" type="text/javascript"></script>
+    <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+</div>
+</body>
+</html>

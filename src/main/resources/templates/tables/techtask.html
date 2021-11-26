@@ -1,0 +1,235 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Тех. задания</title>
+
+    <div th:replace="fragments/header :: header-css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/buttons.dataTables.min.css}">
+</head>
+<body>
+
+<div th:replace="fragments/header :: header"/>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-10 mt-5 mb-5">
+            <h3>База данных технических заданий</h3>
+            <table id="table" class="table table-bordered table-responsive" style="width: 100%">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Ссылка</th>
+                    <th sec:authorize="hasAuthority('ADMIN')">Действия</th>
+                </tr>
+                </thead>
+                <tfoot>
+                <tr>
+                    <th>ID</th>
+                    <th>Ссылка</th>
+                    <th sec:authorize="hasAuthority('ADMIN')">Действия</th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<div th:replace="fragments/footer :: footer"/>
+<script href="/js/datatables.js" th:src="@{/js/datatables.js}"></script>
+<script href="/js/dataTables.buttons.min.js" th:src="@{/js/dataTables.buttons.min.js}"></script>
+
+<div class="modal modal-danger fade" id="modal_delete">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Удаление</h4>
+            </div>
+            <div class="modal-body">
+                <p>Вы действительно хотите удалить тех. задание?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Отмена</button>
+                <button id="delete_action" type="button" class="btn btn-outline">Подтверждаю</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-warning fade" id="modal_edit">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Редактирование</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="link">Ссылка</label>
+                    <input name="link" id="link" type="text" value="" class="form-control"
+                           placeholder="Ссылка">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Отменить</button>
+                <button id="edit_action" type="button" class="btn btn-outline">Сохранить</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-warning fade" id="modal_add">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Добавить тех. задание</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="link_new">Ссылка</label>
+                    <input name="link_new" id="link_new" type="text" value="" class="form-control"
+                           placeholder="Ссылка">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Отменить</button>
+                <button id="save_action" type="button" class="btn btn-outline">Сохранить</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" id="item_id" value="0"/>
+
+<script>
+    var datatable;
+
+    function delete_action(item_id) {
+        $('#item_id').val(item_id);
+    }
+
+    function edit_action(this_el, item_id) {
+        $('#item_id').val(item_id);
+        var tr_el = this_el.closest('tr');
+        var row = datatable.row(tr_el);
+        var data = row.data();
+        $('#link').val(data[1]);
+    }
+
+    function initDataTable() {
+        var isAdmin = [[${#authorization.expression('hasRole(''ROLE_ADMIN'')')}]];
+        var buttons = [];
+        var columnDefs = [];
+
+        if (isAdmin) {
+            buttons = [
+                {
+                    text: 'Добавить тех. задание',
+                    className: 'btn btn-success btn-outline'
+                }
+            ];
+            columnDefs = [
+                {
+                    'targets': -1,
+                    'defaultContent': '-',
+                    'searchable': false,
+                    'orderable': false,
+                    'width': '10%',
+                    'className': 'dt-body-center',
+                    'render': function (data, type, full_row) {
+                        return '<div style="display:block">' +
+                            '<button onclick="delete_action(' + full_row[0] + ')" type="button" class="delete_action btn btn-danger btn-xs" data-toggle="modal" data-target="#modal_delete" style="margin:3px"><i class="fa fa-remove"></i>Удалить</button>' +
+                            '<button onclick="edit_action(this, ' + full_row[0] + ')" type="button" class="edit_action btn btn-warning btn-xs" data-toggle="modal" data-target="#modal_edit" style="margin:3px"><i class="fa fa-edit"></i>Редактировать</button>' +
+                            '</div>';
+                    }
+                }]
+        }
+
+        datatable = $('#table').DataTable({
+            "processing": true,
+            "serverSide": true,
+            dom: 'Bfrtip',
+            "ajax": {
+                "url": "techtask/array",
+                "type": "POST",
+                "dataType": "json",
+                "contentType": "application/json",
+                "data": function (d) {
+                    return JSON.stringify(d);
+                }
+            },
+            'columnDefs': columnDefs,
+            buttons: buttons
+        });
+        datatable.buttons('.btn').nodes().attr({"data-toggle": 'modal', "data-target": "#modal_add"});
+        return datatable;
+    }
+
+    $(document).ready(function () {
+        var dataTable = initDataTable();
+        $('#delete_action').on('click', function (e) {
+            e.preventDefault();
+            console.log("trying to delete " + $('#item_id').val());
+            $.ajax({
+                url: "techtask/delete",
+                data: {
+                    'techtask_id': $('#item_id').val()
+                },
+                type: "POST",
+                success: function (data) {
+                    $('#modal_delete').modal('hide');
+                    dataTable.ajax.reload(null, false);
+                    console.log(data.message);
+                }
+            })
+        });
+        $('#edit_action').on('click', function (e) {
+            e.preventDefault();
+            console.log("trying to update " + $('#item_id').val());
+            $.ajax({
+                url: "techtask/update",
+                data: {
+                    'techtask_id': $('#item_id').val(),
+                    'link': $('#link').val()
+                },
+                type: "POST",
+                success: function (response) {
+                    $('#modal_edit').modal('hide');
+                    dataTable.ajax.reload(null, false);
+                }
+            });
+        });
+        $('#save_action').on('click', function (e) {
+            e.preventDefault();
+            console.log("trying to add new tech task");
+            $.ajax({
+                url: "techtask/add",
+                data: {
+                    'link': $('#link_new').val()
+                },
+                type: "POST",
+                success: function (response) {
+                    $('#modal_add').modal('hide');
+                    dataTable.ajax.reload(null, false);
+                }
+            });
+        });
+        $('#modal_delete').on('hidden.bs.modal', function () {
+            $('#item_id').val(0);
+        });
+        $('#modal_edit').on('hidden.bs.modal', function () {
+            $('#item_id').val(0);
+        });
+        $('#modal_add').on('hidden.bs.modal', function () {
+            $('#item_id').val(0);
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Сырой материал</title>
+
+    <div th:replace="fragments/header :: header-css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/buttons.dataTables.min.css}">
+</head>
+<body>
+
+<div th:replace="fragments/header :: header"/>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-10 mt-5 mb-5">
+            <h3>База данных сырого материала</h3>
+            <table id="table" class="table table-bordered table-responsive" style="width: 100%">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Название</th>
+                    <th>Длительность</th>
+                    <th>Статус</th>
+                    <th>ID сценария</th>
+                    <th>ID тех. задания</th>
+                    <th sec:authorize="hasAuthority('ADMIN')">Действия</th>
+                </tr>
+                </thead>
+                <tfoot>
+                <tr>
+                    <th>ID</th>
+                    <th>Название</th>
+                    <th>Длительность</th>
+                    <th>Статус</th>
+                    <th>ID сценария</th>
+                    <th>ID тех. задания</th>
+                    <th sec:authorize="hasAuthority('ADMIN')">Действия</th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<div th:replace="fragments/footer :: footer"/>
+<script href="/js/datatables.js" th:src="@{/js/datatables.js}"></script>
+<script href="/js/dataTables.buttons.min.js" th:src="@{/js/dataTables.buttons.min.js}"></script>
+
+<div class="modal modal-danger fade" id="modal_delete">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Удаление</h4>
+            </div>
+            <div class="modal-body">
+                <p>Вы действительно хотите удалить материал?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Отмена</button>
+                <button id="delete_action" type="button" class="btn btn-outline">Подтверждаю</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-warning fade" id="modal_edit">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Редактирование</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="name">Название</label>
+                    <input name="name" id="name" type="text" value="" class="form-control" placeholder="Название">
+                </div>
+                <div class="form-group">
+                    <label for="duration">Длительность</label>
+                    <input name="duration" id="duration" type="number" value="" class="form-control"
+                           placeholder="Длительность">
+                </div>
+                <div class="form-group">
+                    <label for="status">Статус</label>
+                    <input name="status" id="status" type="text" value="" class="form-control"
+                           placeholder="Статус">
+                </div>
+                <div class="form-group">
+                    <label for="scenario_id">ID сценария</label>
+                    <input name="scenario_id" id="scenario_id" type="number" value="" class="form-control"
+                           placeholder="ID сценария">
+                </div>
+                <div class="form-group">
+                    <label for="techtask_id">ID тех. задания</label>
+                    <input name="techtask_id" id="techtask_id" type="number" value="" class="form-control"
+                           placeholder="ID тех. задания">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Отменить</button>
+                <button id="edit_action" type="button" class="btn btn-outline">Сохранить</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-warning fade" id="modal_add">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Добавить сырой материал</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="name_new">Название</label>
+                    <input name="name_new" id="name_new" type="text" value="" class="form-control"
+                           placeholder="Название">
+                </div>
+                <div class="form-group">
+                    <label for="duration_new">Длительность</label>
+                    <input name="duration_new" id="duration_new" type="number" value="" class="form-control"
+                           placeholder="Длительность">
+                </div>
+                <div class="form-group">
+                    <label for="status_new">Статус</label>
+                    <input name="status_new" id="status_new" type="text" value="" class="form-control"
+                           placeholder="Статус">
+                </div>
+                <div class="form-group">
+                    <label for="scenario_id_new">ID сценария</label>
+                    <input name="scenario_id_new" id="scenario_id_new" type="number" value="" class="form-control"
+                           placeholder="ID сценария">
+                </div>
+                <div class="form-group">
+                    <label for="techtask_id_new">ID тех. задания</label>
+                    <input name="techtask_id_new" id="techtask_id_new" type="number" value="" class="form-control"
+                           placeholder="ID тех. задания">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Отменить</button>
+                <button id="save_action" type="button" class="btn btn-outline">Сохранить</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<input type="hidden" id="item_id" value="0"/>
+
+<script>
+    var datatable;
+
+    function delete_action(item_id) {
+        $('#item_id').val(item_id);
+    }
+
+    function edit_action(this_el, item_id) {
+        $('#item_id').val(item_id);
+        var tr_el = this_el.closest('tr');
+        var row = datatable.row(tr_el);
+        var data = row.data();
+        $('#name').val(data[1]);
+        $('#duration').val(data[2]);
+        $('#status').val(data[3]);
+        $('#scenario_id').val(data[4]);
+        $('#techtask_id').val(data[5]);
+    }
+
+    function initDataTable() {
+        var isAdmin = [[${#authorization.expression('hasRole(''ROLE_ADMIN'')')}]];
+        var buttons = [];
+        var columnDefs = [];
+
+        if (isAdmin) {
+            buttons = [
+                {
+                    text: 'Добавить сырой материал',
+                    className: 'btn btn-success btn-outline'
+                }
+            ];
+            columnDefs = [
+                {
+                    'targets': -1,
+                    'defaultContent': '-',
+                    'searchable': false,
+                    'orderable': false,
+                    'width': '10%',
+                    'className': 'dt-body-center',
+                    'render': function (data, type, full_row) {
+                        return '<div style="display:block">' +
+                            '<button onclick="delete_action(' + full_row[0] + ')" type="button" class="delete_action btn btn-danger btn-xs" data-toggle="modal" data-target="#modal_delete" style="margin:3px"><i class="fa fa-remove"></i>Удалить</button>' +
+                            '<button onclick="edit_action(this, ' + full_row[0] + ')" type="button" class="edit_action btn btn-warning btn-xs" data-toggle="modal" data-target="#modal_edit" style="margin:3px"><i class="fa fa-edit"></i>Редактировать</button>' +
+                            '</div>';
+                    }
+                }]
+        }
+
+        datatable = $('#table').DataTable({
+            "processing": true,
+            "serverSide": true,
+            dom: 'Bfrtip',
+            "ajax": {
+                "url": "raw_material/array",
+                "type": "POST",
+                "dataType": "json",
+                "contentType": "application/json",
+                "data": function (d) {
+                    return JSON.stringify(d);
+                }
+            },
+            'columnDefs': columnDefs,
+            buttons: buttons
+        });
+        datatable.buttons('.btn').nodes().attr({"data-toggle": 'modal', "data-target": "#modal_add"});
+        return datatable;
+    }
+
+    $(document).ready(function () {
+        var dataTable = initDataTable();
+        $('#delete_action').on('click', function (e) {
+            e.preventDefault();
+            console.log("trying to delete " + $('#item_id').val());
+            $.ajax({
+                url: "raw_material/delete",
+                data: {
+                    'raw_id': $('#item_id').val()
+                },
+                type: "POST",
+                success: function (data) {
+                    $('#modal_delete').modal('hide');
+                    dataTable.ajax.reload(null, false);
+                    console.log(data.message);
+                }
+            })
+        });
+        $('#edit_action').on('click', function (e) {
+            e.preventDefault();
+            console.log("trying to update " + $('#item_id').val());
+            $.ajax({
+                url: "raw_material/update",
+                data: {
+                    'raw_id': $('#item_id').val(),
+                    'name': $('#name').val(),
+                    'duration': $('#duration').val(),
+                    'status': $('#status').val(),
+                    'scenario_id': $('#scenario_id').val(),
+                    'techtask_id': $('#techtask_id').val()
+                },
+                type: "POST",
+                success: function (response) {
+                    $('#modal_edit').modal('hide');
+                    dataTable.ajax.reload(null, false);
+                }
+            });
+        });
+        $('#save_action').on('click', function (e) {
+            e.preventDefault();
+            console.log("trying to add new raw material");
+            $.ajax({
+                url: "raw_material/add",
+                data: {
+                    'name': $('#name_new').val(),
+                    'duration': $('#duration_new').val(),
+                    'status': $('#status_new').val(),
+                    'scenario_id': $('#scenario_id_new').val(),
+                    'techtask_id': $('#techtask_id_new').val()
+                },
+                type: "POST",
+                success: function (response) {
+                    $('#modal_add').modal('hide');
+                    dataTable.ajax.reload(null, false);
+                }
+            });
+        });
+        $('#modal_delete').on('hidden.bs.modal', function () {
+            $('#item_id').val(0);
+        });
+        $('#modal_edit').on('hidden.bs.modal', function () {
+            $('#item_id').val(0);
+        });
+        $('#modal_add').on('hidden.bs.modal', function () {
+            $('#item_id').val(0);
+        });
+    });
+</script>
+</body>
+</html>

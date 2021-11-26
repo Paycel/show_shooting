@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="fragments/header :: header-css"/>
+    <title>Профиль</title>
+</head>
+<body>
+<div th:replace="fragments/header :: header"/>
+
+<div class="container">
+
+    <div class="starter-template">
+        <h1>Ваш профиль</h1>
+        <h1 th:inline="text">Приветствуем, [[${#httpServletRequest.remoteUser}]]!</h1>
+
+        <div class="mt-3">
+            <h2>Администрирование (Только для админов)</h2>
+            <form action="/profile/admin/" method="get">
+                <button type="submit" class="btn btn-info">Перейти к странице администрации</button>
+            </form>
+        </div>
+
+        <div>
+            <h2>Просмотр таблиц</h2>
+            <form method="get" action="/profile/tables">
+                <button type="submit" class="btn btn-info">Перейти к просмотру таблиц</button>
+            </form>
+        </div>
+
+    </div>
+    <!-- /.container -->
+    <div th:replace="fragments/footer :: footer"/>
+
+</body>
+</html>
